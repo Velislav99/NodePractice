@@ -1,6 +1,6 @@
 import { getLinks, saveLinks} from  './feed-manager.mjs';
 import {question, close} from './rl.mjs';
-import https from 'https';
+import axios from 'axios';
 
 const feeds = await getLinks();
 
@@ -38,17 +38,9 @@ while (input !== 'exit'){
     }
     //read index
     if (cmd === 'read'){
-        https.get('https://www.reddit.com/r/javascript.rss', (response) =>{
-            let content = '';
+        let {data} = await axios.get ('https://www.reddit.com/r/javascript.rss');
 
-            response.on('data', (chunk) => {
-                content += chunk;
-            });
-
-            response.on('end', () => {
-                console.log(content);
-            });
-        })
+        console.log(data);
     }
 
     input = await question('Enter a command (list, add, del, read, exit): '); 
